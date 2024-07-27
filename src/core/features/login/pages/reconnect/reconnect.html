@@ -72,6 +72,9 @@
                         class="ion-margin core-login-login-button ion-text-wrap">
                         {{ 'core.login.loginbutton' | translate }}
                     </ion-button>
+                    <ion-button expand="block" (click)="enroll()" class="ion-text-wrap">
+                        {{ 'core.courses.enrolme' | translate }}
+                    </ion-button>
 
                     <!-- Forgotten password option. -->
                     <ion-button *ngIf="showForgottenPassword" expand="block" fill="clear"
@@ -88,6 +91,7 @@
                     </ion-button>
                     <p class="text-center core-login-inbrowser">{{ 'core.openinbrowserdescription' | translate }}</p>
                 </ng-container>
+
 
                 <!-- Additional Login methods -->
                 <core-login-methods *ngIf="siteConfig" [siteConfig]="siteConfig" [reconnect]="true" [siteUrl]="site.siteUrl"
