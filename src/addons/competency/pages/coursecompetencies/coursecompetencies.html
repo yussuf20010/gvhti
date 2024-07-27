@@ -28,8 +28,6 @@
                         {{ 'addon.competency.xcompetenciesproficientoutofyincourse' | translate: {$a:
                         {x: courseCompetencies.statistics.proficientcompetencycount, y: courseCompetencies.statistics.competencycount} } }}
                     </span>
-                    <core-progress-bar [progress]="courseCompetencies.statistics.proficientcompetencypercentage"
-                        ariaDescribedBy="addon-competency-course-{{courseId}}-progress" />
                 </ion-label>
             </ion-item>
             <ion-item class="ion-text-wrap"
