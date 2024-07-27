@@ -52,9 +52,6 @@
                             <core-reminders-date *ngIf="course.startdate" component="course" [instanceId]="course.id" type="coursestart"
                                 [label]="'core.course.startdate' | translate" [time]="course.startdate" [title]="course.fullname"
                                 [url]="courseUrl" />
-                            <core-reminders-date *ngIf="course.enddate" component="course" [instanceId]="course.id" type="courseend"
-                                [label]="'core.course.enddate' | translate" [time]="course.enddate" [title]="course.fullname"
-                                [url]="courseUrl" />
                         </div>
                     </ion-label>
                 </ion-item>
