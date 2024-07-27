@@ -9,11 +9,6 @@
                 [ariaLabel]="prefetchCoursesData.statusTranslatable | translate">
                 <ion-icon [name]="prefetchCoursesData.icon" slot="icon-only" aria-hidden="true" />
             </ion-button>
-            <ion-badge class="core-course-download-courses-progress" *ngIf="prefetchCoursesData.badge" role="progressbar"
-                [attr.aria-valuemax]="prefetchCoursesData.total" [attr.aria-valuenow]="prefetchCoursesData.count"
-                [attr.aria-valuetext]="prefetchCoursesData.badgeA11yText">
-                {{prefetchCoursesData.badge}}
-            </ion-badge>
             <ion-spinner *ngIf="prefetchCoursesData.loading" [attr.aria-label]="'core.loading' | translate" />
         </div>
     </div>
@@ -37,11 +32,6 @@
                 </ion-select-option>
                 <ion-select-option class="ion-text-wrap core-select-option-border-bottom" value="all" *ngIf="filters.show.all">
                     {{ 'addon.block_myoverview.all' | translate }}
-                </ion-select-option>
-                <ion-select-option class="ion-text-wrap"
-                    [class.core-select-option-border-bottom]="!filters.show.past && !filters.show.future" value="inprogress"
-                    *ngIf="filters.show.inprogress">
-                    {{ 'addon.block_myoverview.inprogress' | translate }}
                 </ion-select-option>
                 <ion-select-option class="ion-text-wrap" [class.core-select-option-border-bottom]="!filters.show.past" value="future"
                     *ngIf="filters.show.future">
