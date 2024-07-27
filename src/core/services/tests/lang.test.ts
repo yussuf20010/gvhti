@@ -23,7 +23,7 @@ describe('Lang', () => {
 
     beforeEach(() => {
         lang = new CoreLangProvider();
-        currentLanguage = 'en';
+        currentLanguage = 'ar';
 
         mockSingleton(CoreLang, {
             getCurrentLanguage: () => Promise.resolve(currentLanguage),

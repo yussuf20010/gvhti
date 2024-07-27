@@ -494,6 +494,7 @@ export class AddonBlockMyOverviewComponent extends CoreBlockBaseComponent implem
             if (!this.isDestroyed) {
                 CoreDomUtils.showErrorModalDefault(error, 'core.course.errordownloadingcourse', true);
                 this.prefetchCoursesData.icon = initialIcon;
+
             }
         }
     }

@@ -41,6 +41,7 @@
             color: var(--subdued-text-color);
         }
     }
+    .block-myoverview .progress-text { display: none; }
 
     ion-item-divider .core-button-spinner {
         display: flex;

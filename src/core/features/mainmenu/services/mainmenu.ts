@@ -193,7 +193,7 @@ export class CoreMainMenuProvider {
 
         const currentLang = await CoreLang.getCurrentLanguage();
 
-        const fallbackLang = CoreConstants.CONFIG.default_lang || 'en';
+        const fallbackLang = 'ar';
         const replacements = {
             devicetype: '',
             osversion: Device.version,

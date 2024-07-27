@@ -122,6 +122,21 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
             });
     }
 
+    async enroll(): Promise<void> {
+        // eslint-disable-next-line max-len
+        const url = 'https://www.gvhti.site/?fbclid=IwY2xjawEQgopleHRuA2FlbQIxMAABHcw-ZvaoKQDz8I2pe8FFedNr5wHhz6ZAe7QurvgPxLNZ0FkGODfugaxqPQ_aem_X4KY6GOJ_fIr7jaYPS6RNA';
+        const target = '_blank'; // Use '_blank' to open in an in-app browser
+        const options = 'location=no,hidden=yes';
+        try {
+            const ref = window.cordova.InAppBrowser.open(url, target, options);
+            ref.show(); // Show the InAppBrowser immediately
+
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error opening InAppBrowser:', error);
+        }
+    }
+
     /**
      * Load site logo from current site public config.
      *

@@ -263,7 +263,7 @@ export class CoreUrlUtilsProvider {
             let lang = await CoreLang.getCurrentLanguage(CoreLangFormat.LMS);
             lang = CoreLang.getParentLanguage() || lang;
 
-            return docsUrl.replace('/en/', '/' + lang + '/');
+            return docsUrl.replace('/ar/', '/' + lang + '/');
         } catch (error) {
             return docsUrl;
         }

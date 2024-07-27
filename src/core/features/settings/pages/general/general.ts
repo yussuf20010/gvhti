@@ -40,7 +40,7 @@ import { CoreNative } from '@features/native/services/native';
 export class CoreSettingsGeneralPage {
 
     languages: { code: string; name: string }[] = [];
-    selectedLanguage = '';
+    selectedLanguage = 'ar';
     zoomLevels: { value: CoreZoomLevel; style: number; selected: boolean }[] = [];
     selectedZoomLevel = CoreZoomLevel.NONE;
     richTextEditor = true;

@@ -46,6 +46,7 @@ import { CoreEnrol, CoreEnrolEnrolmentMethod } from '@features/enrol/services/en
 /**
  * Page that shows the summary of a course including buttons to enrol and other available options.
  */
+
 @Component({
     selector: 'page-core-course-summary',
     templateUrl: 'course-summary.html',
@@ -59,7 +60,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
     @ViewChild('courseThumb') courseThumb?: ElementRef;
 
     isEnrolled = false;
-
+    isLoading = false; // Define isLoading as a boolean property
     canAccessCourse = true;
     useGuestAccess = false;
 
@@ -144,12 +145,47 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
         await this.getCourse();
     }
 
+    async enroll(): Promise<void> {
+        // eslint-disable-next-line max-len
+        const url = 'https://www.gvhti.site/?fbclid=IwY2xjawEQgopleHRuA2FlbQIxMAABHcw-ZvaoKQDz8I2pe8FFedNr5wHhz6ZAe7QurvgPxLNZ0FkGODfugaxqPQ_aem_X4KY6GOJ_fIr7jaYPS6RNA';
+        const target = '_blank'; // Use '_blank' to open in an in-app browser
+        const options = 'location=no,hidden=yes';
+
+        // Set loading indicator to true
+        this.isLoading = true;
+
+        try {
+            const ref = window.cordova.InAppBrowser.open(url, target, options);
+
+            // Listen for loadstart event to show loading indicator
+            const loadstartListener = () => {
+                this.isLoading = true;
+            };
+            ref.addEventListener('loadstart', loadstartListener);
+
+            // Listen for loadstop event to hide loading indicator
+            const loadstopListener = () => {
+                this.isLoading = false; // Hide loading indicator when fully loaded
+                ref.removeEventListener('loadstop', loadstopListener); // Clean up event listener
+            };
+
+            ref.addEventListener('loadstop', loadstopListener);
+            ref.show(); // Show the InAppBrowser immediately
+
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error opening InAppBrowser:', error);
+            this.isLoading = false; // Hide loading indicator on error
+        }
+    }
+
     /**
-     * Convenience function to get course. We use this to determine if a user can see the course or not.
+     *Convenience function to get course. We use this to determine if a user can see the course or not.
      *
      * @param refresh If it's refreshing content.
      */
-    protected async getCourse(refresh = false): Promise<void> {
+
+     async getCourse(refresh = false): Promise<void> {
         try {
             await this.getCourseData();
 
@@ -182,7 +218,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
     /**
      * Get course data.
      */
-    protected async getCourseData(): Promise<void> {
+     async getCourseData(): Promise<void> {
         this.canAccessCourse = false;
         this.useGuestAccess = false;
 
@@ -225,7 +261,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
      *
      * @param enrolmentMethods Enrolment methods.
      */
-    protected async getEnrolmentInfo(enrolmentMethods?: string[]): Promise<void> {
+     async getEnrolmentInfo(enrolmentMethods?: string[]): Promise<void> {
         if (this.isEnrolled) {
             return;
         }
@@ -257,7 +293,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
      * @param refresh If it's refreshing content.
      * @returns Promise resolved when done.
      */
-    protected async loadMenuHandlers(refresh?: boolean): Promise<void> {
+     async loadMenuHandlers(refresh?: boolean): Promise<void> {
         if (!this.course || !this.canAccessCourse) {
             return;
         }
@@ -337,33 +373,6 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Enrol in browser.
-     */
-    async browserEnrol(): Promise<void> {
-        // Send user to browser to enrol. Warn the user first.
-        try {
-            await CoreDomUtils.showConfirm(
-                Translate.instant('core.courses.browserenrolinstructions'),
-                Translate.instant('core.courses.completeenrolmentbrowser'),
-                Translate.instant('core.openinbrowser'),
-            );
-        } catch {
-            // User canceled.
-            return;
-        }
-
-        this.waitingForBrowserEnrol = true;
-
-        await CoreSites.getRequiredCurrentSite().openInBrowserWithAutoLogin(
-            this.enrolUrl,
-            undefined,
-            {
-                showBrowserWarning: false,
-            },
-        );
-    }
-
-    /**
      * Self enrol in a course.
      *
      * @param enrolMethod The enrolment method.
@@ -434,7 +443,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
      * @param first If it's the first call (true) or it's a recursive call (false).
      * @returns Promise resolved when enrolled or timeout.
      */
-    protected async waitForEnrolled(first?: boolean): Promise<void> {
+     async waitForEnrolled(first?: boolean): Promise<void> {
         if (first) {
             this.waitStart = Date.now();
         }
@@ -490,7 +499,7 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
     /**
      * Set course color.
      */
-    protected async setCourseColor(): Promise<void> {
+     async setCourseColor(): Promise<void> {
         if (!this.course) {
             return;
         }
@@ -514,47 +523,6 @@ export class CoreCourseSummaryPage implements OnInit, OnDestroy {
     /**
      * Open enrol action sheet.
      */
-    async enrolMe(): Promise<void> {
-        if (this.selfEnrolInstances.length == 1 && !this.hasBrowserEnrolments) {
-            this.selfEnrolInCourse(this.selfEnrolInstances[0]);
-
-            return;
-        }
-
-        if (this.selfEnrolInstances.length == 0 && this.hasBrowserEnrolments) {
-            this.browserEnrol();
-
-            return;
-        }
-
-        const buttons: ActionSheetButton[] = this.selfEnrolInstances.map((enrolMethod) => ({
-            text: enrolMethod.name,
-            handler: (): void => {
-                this.selfEnrolInCourse(enrolMethod);
-            },
-        }));
-
-        if (this.hasBrowserEnrolments) {
-            buttons.push({
-                text: Translate.instant('core.courses.completeenrolmentbrowser'),
-                handler: (): void => {
-                    this.browserEnrol();
-                },
-            });
-        }
-
-        buttons.push({
-            text: Translate.instant('core.cancel'),
-            role: 'cancel',
-        });
-
-        this.actionSheet = await ActionSheetController.create({
-            header:  Translate.instant('core.courses.enrolme'),
-            buttons: buttons,
-        });
-
-        await this.actionSheet.present();
-    }
 
     /**
      * Toggle list of contacts.

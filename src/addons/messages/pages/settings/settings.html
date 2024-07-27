@@ -74,6 +74,9 @@
         </ng-container>
     </core-loading>
 </ion-content>
+<ion-button expand="block" (click)="enroll()" class="ion-text-wrap">
+    {{ 'core.courses.enrolme' | translate }}
+</ion-button>
 
 <!-- Only 3.5 version -->
 <ng-template #legacySettings let-preferences="preferences">
@@ -119,6 +122,7 @@
         </ion-card>
     </ng-container>
 </ng-template>
+
 
 
 <ng-template #settings let-preferences="preferences">

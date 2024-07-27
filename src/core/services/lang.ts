@@ -35,8 +35,8 @@ import { CoreSites } from './sites';
 @Injectable({ providedIn: 'root' })
 export class CoreLangProvider {
 
-    protected fallbackLanguage = 'en'; // Always use English as fallback language since it contains all strings.
-    protected defaultLanguage = CoreConstants.CONFIG.default_lang || 'en'; // Lang to use if device lang not valid or is forced.
+    protected fallbackLanguage = 'ar'; // Always use English as fallback language since it contains all strings.
+    protected defaultLanguage = 'ar'; // Lang to use if device lang not valid or is forced.
     protected currentLanguage?: string; // Save current language in a variable to speed up the get function.
     protected customStrings: CoreLanguageObject = {}; // Strings defined using the admin tool.
     protected customStringsRaw?: string;
@@ -72,8 +72,7 @@ export class CoreLangProvider {
         let language: string;
 
         if (CorePlatform.isAutomated()) {
-            // Force current language to English when Behat is running.
-            language = 'en';
+            language = 'ar';
         } else {
             language = await this.getCurrentLanguage();
         }
@@ -174,8 +173,7 @@ export class CoreLangProvider {
      * @returns Promise resolved when the change is finished.
      */
     async changeCurrentLanguage(language: string): Promise<void> {
-        // Use british english when parent english is loaded.
-        moment.locale(language == 'en' ? 'en-gb' : language);
+        moment.locale(language == 'ar' ? 'ar' : language);
 
         const previousLanguage = this.currentLanguage ?? this.getDefaultLanguage();
 
@@ -288,7 +286,7 @@ export class CoreLangProvider {
         if (preferredLanguage.indexOf('-') > -1) {
             // Language code defined by locale has a dash, like en-US or es-ES. Check if it's supported.
             if (CoreConstants.CONFIG.languages && CoreConstants.CONFIG.languages[preferredLanguage] === undefined) {
-                // Code is NOT supported. Fallback to language without dash. E.g. 'en-US' would fallback to 'en'.
+                // Code is NOT supported. Fallback to language without dash. E.g. '' would fallback to ''.
                 preferredLanguage = preferredLanguage.substring(0, preferredLanguage.indexOf('-'));
             }
         }
